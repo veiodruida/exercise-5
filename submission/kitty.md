@@ -15,6 +15,7 @@
 		- `price: Option Balance`
 - Storages
   - `Kitties: double_map AccountId, u32 => Option<Kitty>`
+  - `KittyPrices: KittyIndex => Option<BalanceOf>`
   - `NextKittyId: u32`
 - Types
   - `struct Kitty([u8; 16])`
