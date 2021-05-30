@@ -132,15 +132,15 @@ fn can_breed() {
 #[test]
 fn can_transfer() {
     new_test_ext().execute_with(|| {
-        assert_ok!(KittiesModule::create(Origin::signed(100)));
+        assert_ok!(KittiesModule::create(Origin::signed(101)));
 
-        set_random(H256::from([2; 32]));
+        assert_noop!(KittiesModule::transfer(Origin::signed(100), 101, 99999), Error::<Test>::InvalidKittyId);
+        assert_noop!(KittiesModule::transfer(Origin::signed(100), 100, 1), Error::<Test>::InvalidKittyId);
+        assert_noop!(KittiesModule::transfer(Origin::signed(102), 100, 1), Error::<Test>::InvalidKittyId);
 
-        assert_ok!(KittiesModule::create(Origin::signed(100)));
+        assert_ok!(KittiesModule::transfer(Origin::signed(101), 102, 1));
 
-        assert_noop!(KittiesModule::transfer(Origin::signed(100), 101, 0), Error::<Test>::InvalidKittyId);
+        assert_eq!(last_event(), Event::kitties(crate::Event::<Test>::KittyTransferred(101, 102, 1)));
 
-        
     });
 }
-// TODO: add new test cases for `fn transfer`. Make sure you have covered edge cases
