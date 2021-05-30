@@ -129,5 +129,18 @@ fn can_breed() {
         assert_eq!(last_event(), Event::kitties(crate::Event::<Test>::KittyBred(100u64, 2u32, kitty)));
     });
 }
+#[test]
+fn can_transfer() {
+    new_test_ext().execute_with(|| {
+        assert_ok!(KittiesModule::create(Origin::signed(100)));
 
+        set_random(H256::from([2; 32]));
+
+        assert_ok!(KittiesModule::create(Origin::signed(100)));
+
+        assert_noop!(KittiesModule::transfer(Origin::signed(100), 101, 0), Error::<Test>::InvalidKittyId);
+
+        
+    });
+}
 // TODO: add new test cases for `fn transfer`. Make sure you have covered edge cases
